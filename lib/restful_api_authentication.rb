@@ -45,8 +45,8 @@ module RestfulApiAuthentication
   # client must have is_master flag set to true to pass authentication
   # returns a 401 not authorized if the authentication headers are missing or invalid
   def authenticated_master?
-    checker = RestfulApiAuthentication::Checker.new(request.headers, request.fullpath, :require_master => true)
-    if checker.authorized?
+    checker = RestfulApiAuthentication::Checker.new(request.headers, request.fullpath)
+    if checker.authorized?({:require_master => true})
       return true
     else
       respond_with(["not authorized"], :status => 401, :location => nil)
