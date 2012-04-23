@@ -41,7 +41,7 @@ Update the configuration (if you like) by editing the `config/restful_api_authen
 
 ## Usage
 
-### How It Works
+### How It Works From A Client's Perspective
 
 Before anyone can use a resource which is protected using this gem, that person/app must have a valid API key and secret. These are generated and stored as a RestClient model in your app. The easiest way to generate this is to use the Rails console:
 
@@ -56,11 +56,6 @@ In order to authenticate with your web service, the new application must include
 * x-api-key
 * x-signature
 
-If you are using an API resource which requires authentication you must include the following HTTP headers with the request:
-x-timestamp
-x-api-key
-x-signature
-
 The x-timestamp should be the date and time the request is sent. It should be in UTC time and be formatted as "YYYY-MM-DD HH:MM:SS UTC". For example: `2012-03-31 15:37:32 UTC`
 
 The x-api-key should be the same as the API key generated above. It should look something like `0f0721f0-5cc9-012f-c884-68a86d3dfd0`.
@@ -73,7 +68,7 @@ Here is an example in Ruby code using the HTTParty gem:
 require 'httparty'
 require 'digest/sha2'
 
-class StarStarMeApi
+class MyTestApi
   include HTTParty
 
   API_KEY = "e4a80df0-5cca-012f-c884-68a86d3dfd02"
@@ -88,20 +83,34 @@ class StarStarMeApi
   end
   
   def authenticate_test
-    request_uri = "https://api.starstar.me/help/authenticate"
+    request_uri = "https://api.mywebservice.com/help/authenticate"
     self.class.post(request_uri, { :headers => auth_headers(request_uri) })
   end
 
 end
 
-api = StarStarMeApi.new
+api = MyTestApi.new
 result = api.authenticate_test
 puts result.inspect
 ```
 
 ### Configuration
 
-In the `config/restful_api_authentication.yml` file you will find several things that you can change. The defaults are usually fine for most cases, but if you wan
+In the `config/restful_api_authentication.yml` file you will find several things that you can change. The defaults are usually fine for most cases.
+
+### Requiring Authentication
+
+To require authentication for a specific resource (controller) of your RESTful web service, add this at the top of your controller just under where you open the controller class:
+
+```ruby
+include RestfulApiAuthentication
+respond_to :json, :xml
+before_filter :authenticated?
+```
+
+If you want to protect your entire web service, add those same lines to your ApplicationController class.
+
+If the headers are not provided or the application fails to authenticate, your web service will deliver a 401 Unauthorized response.
 
 ## Contributing
 
