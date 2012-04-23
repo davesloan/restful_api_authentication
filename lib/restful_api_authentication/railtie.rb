@@ -22,5 +22,20 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 module RestfulApiAuthentication
-  VERSION = "0.1.0"
+  class Railtie < Rails::Railtie
+    initializer "restful_api_authentication_railtie.config_initializer" do
+      if File.exists? Rails.root.join('config', 'restful_api_authentication.yml')
+        config_data = YAML::load_file(Rails.root.join('config', 'restful_api_authentication.yml'))[Rails.env]
+        RestfulApiAuthentication::Checker.time_window      = config_data['request_window']
+        RestfulApiAuthentication::Checker.header_timestamp = config_data['header_names']['timestamp']
+        RestfulApiAuthentication::Checker.header_signature = config_data['header_names']['signature']
+        RestfulApiAuthentication::Checker.header_api_key   = config_data['header_names']['api_key']
+      else
+        RestfulApiAuthentication::Checker.time_window      = nil
+        RestfulApiAuthentication::Checker.header_timestamp = nil
+        RestfulApiAuthentication::Checker.header_signature = nil
+        RestfulApiAuthentication::Checker.header_api_key   = nil
+      end
+    end
+  end
 end

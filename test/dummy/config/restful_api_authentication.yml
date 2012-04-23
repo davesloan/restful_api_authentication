@@ -1,0 +1,18 @@
+defaults: &DEFAULTS
+  request_window: 10 # request window in minutes - between 5 and 10 is usually best; must be at least 2
+  header_names:      # names of HTTP headers that must be sent on all requests requiring authentication
+    timestamp: "x-timestamp"
+    signature: "x-signature"
+    api_key: "x-api-key"
+
+test:
+  <<: *DEFAULTS
+  
+cucumber:
+  <<: *DEFAULTS
+  
+development:
+  <<: *DEFAULTS
+  
+production:
+  <<: *DEFAULTS
