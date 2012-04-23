@@ -7,7 +7,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["davejkiger@gmail.com"]
   gem.description   = %q{A gem which implements a standard api_key / secret authentication system for your Ruby on Rails RESTful web services.}
   gem.summary       = %q{With most RESTful Web API's, it is important to know which app is using your resources and that only the apps you allow access those resources. This gem allows you to easily add this layer of authentication to any Rails RESTful resource you want, and it even includes protection against various forms of attack.}
-  gem.homepage      = "https://github.com/davejkiger/restful_api_authentication"
+  gem.homepage      = "http://davejkiger.github.com/restful_api_authentication/"
 
   #gem.files         = `git ls-files`.split($\)
   gem.files         = Dir.glob("{bin,lib}/**/*") + %w(CHANGELOG.md Gemfile LICENSE Rakefile README.md restful_api_authentication.gemspec)

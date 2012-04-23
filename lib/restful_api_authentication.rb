@@ -30,8 +30,9 @@ require File.expand_path('../restful_api_authentication/railtie.rb', __FILE__)
 
 module RestfulApiAuthentication
 
-  # before filter to ensure the request has valid client authentication headers
-  # returns a 401 not authorized if the authentication headers are missing or invalid
+  # This method should be used as a Rails before_filter in any controller in which one wants to ensure requests have valid client authentication headers.
+  #
+  # If the request is not authenticated, it will use the rails respond_with method to send a 401 Unauthorized response.
   def authenticated?
     checker = RestfulApiAuthentication::Checker.new(request.headers, request.fullpath)
     if checker.authorized?
@@ -41,9 +42,11 @@ module RestfulApiAuthentication
     end
   end
 
-  # before filter to ensure the request has valid client authentication headers
-  # client must have is_master flag set to true to pass authentication
-  # returns a 401 not authorized if the authentication headers are missing or invalid
+  # This method should be used as a Rails before_filter in any controller in which one wants to ensure requests have valid client authentication headers and are considered master applications.
+  #
+  # In order to be authenticated, not only do the headers need to be valid but the is_master flag must be true in the associated RestClient model.
+  #
+  # Master accounts can be used for anything you like but are typically reserved for admin specific requests that should only be performed by a limited number of clients.
   def authenticated_master?
     checker = RestfulApiAuthentication::Checker.new(request.headers, request.fullpath)
     if checker.authorized?({:require_master => true})

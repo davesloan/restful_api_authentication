@@ -23,6 +23,7 @@
 
 module RestfulApiAuthentication
   class Checker
+    # Class attributes which are set when the Rails application is initialized: locally cached version of configuration settings stored in YML file.
     cattr_accessor :header_timestamp, :header_signature, :header_api_key, :time_window
     attr_accessor :http_headers, :request_uri
     
