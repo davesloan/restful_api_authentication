@@ -1,0 +1,20 @@
+source 'https://rubygems.org'
+
+gem 'rails', '3.2.0'
+gem 'jquery-rails'
+gem 'uuid', '2.3.5'
+gem 'chronic', '0.6.7'
+gem 'sqlite3'
+gem 'restful_api_authentication', '0.1.1', :path => '/Users/dkiger/git_repos/restful_api_authentication'
+gem 'sass-rails',   '~> 3.2.3'
+gem 'coffee-rails', '~> 3.2.1'
+gem 'therubyracer'
+gem 'uglifier', '>= 1.0.3'
+gem 'factory_girl_rails'                        # use factories instead of fixtures
+gem 'faker'                                     # easily create fake data for tests
+gem 'rspec-rails'                               # test framework
+gem "cucumber-rails", "~> 1.0", require: false  # integration test framework
+gem 'simplecov'                                 # test coverage report
+gem 'json_spec'                                 # easier testing of JSON
+gem 'database_cleaner'                          # manage DB between tests
+gem 'random_data'
