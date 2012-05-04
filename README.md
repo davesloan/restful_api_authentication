@@ -112,6 +112,17 @@ If you want to protect your entire web service, add those same lines to your App
 
 If the headers are not provided or the application fails to authenticate, your web service will deliver a 401 Unauthorized response.
 
+### Master Authentication
+
+Some web services might require an extra bit of security (creating new RestClients or managing User records). In these cases, you can require "master" authorization. Then, any RestClient with the is_master attribute set to true can use the resources but the others cannot.
+
+Assuming you have authentication setup in your application controller, in the controller that requires master authentication:
+
+```ruby
+skip_before_filter :authenticated?
+before_filter :authenticated_master?
+```
+
 ## Contributing
 
 1. Fork it

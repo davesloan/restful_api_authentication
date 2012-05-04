@@ -24,6 +24,7 @@
 require 'digest'
 require 'chronic'
 require 'rails'
+require 'uuid'
 require File.expand_path('../restful_api_authentication/version.rb', __FILE__)
 require File.expand_path('../restful_api_authentication/checker.rb', __FILE__)
 require File.expand_path('../restful_api_authentication/railtie.rb', __FILE__)
