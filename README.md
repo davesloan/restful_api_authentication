@@ -4,6 +4,8 @@ RestfulApiAuthentication is a gem which implements a standard api_key/secret aut
 
 With most RESTful Web API's, it is important to know which app is using your resources and that only the apps you allow access those resources. This gem allows you to easily add this layer of authentication to any Rails RESTful resource you want, and it even includes protection against various forms of attack.
 
+Go here to read a more lengthy description of the problem this gem is attempting to solve: [Authentication of a Ruby on Rails RESTful Web API / Service](http://www.djkiger.com/?p=41)
+
 ## Requirements
 
 1. Rails 3.2.0+
