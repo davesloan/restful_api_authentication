@@ -39,7 +39,11 @@ module RestfulApiAuthentication
     if checker.authorized?
       return true
     else
-      respond_with(["not authorized"], :status => 401, :location => nil)
+      if checker.verbose_errors
+        respond_with(checker.errors, :status => 401, :location => nil)
+      else
+        respond_with(["not authorized"], :status => 401, :location => nil)
+      end
     end
   end
 
@@ -53,7 +57,11 @@ module RestfulApiAuthentication
     if checker.authorized?({:require_master => true})
       return true
     else
-      respond_with(["not authorized"], :status => 401, :location => nil)
+      if checker.verbose_errors
+        respond_with(checker.errors, :status => 401, :location => nil)
+      else
+        respond_with(["not authorized"], :status => 401, :location => nil)
+      end
     end
   end
 

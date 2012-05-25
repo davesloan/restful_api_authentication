@@ -1,5 +1,9 @@
 # Change History / Release Notes
 
+## Version 0.2.0
+
+* Added verbose error messaging; if this is enabled in the YML config file, then the response to an authentication failure will be more descriptive as to why the authentication failed.
+
 ## Version 0.1.2
 
 * Resolved Issue #2: UUID gem is not required and therefore throws an error when this gem is used.

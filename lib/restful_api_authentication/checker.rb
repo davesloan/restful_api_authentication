@@ -24,24 +24,42 @@
 module RestfulApiAuthentication
   class Checker
     # Class attributes which are set when the Rails application is initialized: locally cached version of configuration settings stored in YML file.
-    cattr_accessor :header_timestamp, :header_signature, :header_api_key, :time_window
-    attr_accessor :http_headers, :request_uri
+    cattr_accessor :header_timestamp, :header_signature, :header_api_key, :time_window, :verbose_errors
+    attr_accessor :http_headers, :request_uri, :errors
     
     def initialize(http_headers, request_uri)
       @http_headers = http_headers
       @request_uri = request_uri
+      @errors = []
     end
 
     # Checks if the current request passes authorization
     def authorized?(options = {})
       raise "Configuration values not found. Please run rails g restful_api_authentication:install to generate a config file." if @@header_timestamp.nil? || @@header_signature.nil? || @@header_api_key.nil? || @@time_window.nil?
       return_val = false
-      if headers_have_values? && in_time_window?
-        if (options[:require_master] == true)
-          return_val = true if test_hash == @http_headers[@@header_signature] && is_master?
+      if headers_have_values?
+        if in_time_window?
+          if test_hash == @http_headers[@@header_signature]
+            if options[:require_master] == true
+              if is_master?
+                return_val = true
+              else
+                @errors << "client does not have the required permissions"
+              end
+            else
+              return_val = true
+            end
+          else
+            @errors << "signature is invalid"
+          end
         else
-          return_val = true if test_hash == @http_headers[@@header_signature]
+          @errors << "request is outside the required time window of #{@@time_window.to_s} minutes"
         end
+      else
+        @errors << "one or more required headers is missing"
+      end
+      if return_val == false && @errors.count == 0
+        @errors << "authentication failed"
       end
       return_val
     end
@@ -72,6 +90,9 @@ module RestfulApiAuthentication
       # generates the string that is hashed to produce the signature
       def str_to_hash
         client = RestClient.where(:api_key => @http_headers[@@header_api_key]).first
+        if client.nil?
+          @errors << "client is not registered"
+        end
         client.nil? ? "" : client.secret + @request_uri.gsub( /\?.*/, "" ) + @http_headers[@@header_timestamp]
       end
 

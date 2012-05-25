@@ -23,23 +23,28 @@ Feature: Authentication Testing
     Given a "rest_client" exists
     When I perform an authentication test with "old authentication data"
     Then the HTTP status code should be "401"
+    And the response at index 0 of the JSON response data should be "request is outside the required time window of 4 minutes"
 
   Scenario: When I post a request with a timestamp that is too far in the future, then the app will say I am not authorized.
     Given a "rest_client" exists
     When I perform an authentication test with "future authentication data"
     Then the HTTP status code should be "401"
+    And the response at index 0 of the JSON response data should be "request is outside the required time window of 4 minutes"
 
   Scenario: When I post a request with an unknown api key, then the app will say I am not authorized.
     Given a "rest_client" exists
     When I perform an authentication test with "unknown api key data"
     Then the HTTP status code should be "401"
+    And the response at index 0 of the JSON response data should be "client is not registered"
 
   Scenario: When I post a request with an invalid secret, then the app will say I am not authorized.
     Given a "rest_client" exists
     When I perform an authentication test with "invalid secret data"
     Then the HTTP status code should be "401"
+    And the response at index 0 of the JSON response data should be "signature is invalid"
 
   Scenario: When I post a request with an invalid request URI, then the app will say I am not authorized.
     Given a "rest_client" exists
     When I perform an authentication test with "invalid request uri data"
     Then the HTTP status code should be "401"
+    And the response at index 0 of the JSON response data should be "signature is invalid"
