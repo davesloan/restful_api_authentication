@@ -100,6 +100,14 @@ puts result.inspect
 
 In the `config/restful_api_authentication.yml` file you will find several things that you can change. The defaults are usually fine for most cases.
 
+#### Verbose Error Messages (>= 0.2.0)
+
+By default, the standard response to any authentication error is "not authorized". However, more meaningful explanations of why authentication is failing can be sent by adding the following to the `config/restful_api_authentication.yml` file:
+
+```
+verbose_errors: true
+```
+
 ### Requiring Authentication
 
 To require authentication for a specific resource (controller) of your RESTful web service, add this at the top of your controller just under where you open the controller class:
