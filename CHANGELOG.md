@@ -1,5 +1,10 @@
 # Change History / Release Notes
 
+## Version 0.2.1
+
+* Closed Issue #3 - Failing to define an environment in the YML causes a fatal error
+* Closed Issue #4 - Changes to the request_window in the YML were ignored in favor of the default 4 minute window
+
 ## Version 0.2.0
 
 * Added verbose error messaging; if this is enabled in the YML config file, then the response to an authentication failure will be more descriptive as to why the authentication failed. To enable, add `verbose_errors: true` to the `config/restful_api_authentication.yml`.
