@@ -30,12 +30,17 @@ module RestfulApiAuthentication
       RestfulApiAuthentication::Checker.header_api_key   = 'x-api-key'
       RestfulApiAuthentication::Checker.verbose_errors   = false
       if File.exists? Rails.root.join('config', 'restful_api_authentication.yml')
-        config_data = YAML::load_file(Rails.root.join('config', 'restful_api_authentication.yml'))[Rails.env]
-        RestfulApiAuthentication::Checker.time_window      ||= config_data['request_window']
-        RestfulApiAuthentication::Checker.header_timestamp ||= config_data['header_names']['timestamp']
-        RestfulApiAuthentication::Checker.header_signature ||= config_data['header_names']['signature']
-        RestfulApiAuthentication::Checker.header_api_key   ||= config_data['header_names']['api_key']
-        RestfulApiAuthentication::Checker.verbose_errors   ||= config_data['verbose_errors']
+        begin
+          config_data = YAML::load_file(Rails.root.join('config', 'restful_api_authentication.yml'))[Rails.env]
+          RestfulApiAuthentication::Checker.time_window      = config_data['request_window'].to_i unless config_data['request_window'].nil?
+          RestfulApiAuthentication::Checker.header_timestamp = config_data['header_names']['timestamp'] unless config_data['header_names'].nil? or config_data['header_names']['timestamp'].nil?
+          RestfulApiAuthentication::Checker.header_signature = config_data['header_names']['signature'] unless config_data['header_names'].nil? or config_data['header_names']['signature'].nil?
+          RestfulApiAuthentication::Checker.header_api_key   = config_data['header_names']['api_key'] unless config_data['header_names'].nil? or config_data['header_names']['api_key'].nil?
+          RestfulApiAuthentication::Checker.verbose_errors   = config_data['verbose_errors'] unless config_data['verbose_errors'].nil?
+        rescue Exception => e
+          # do nothing here -- we already have set the defaults
+          Rails.logger.debug e.message
+        end
       end
     end
   end

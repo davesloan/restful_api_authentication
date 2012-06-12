@@ -1,5 +1,11 @@
 Feature: Authentication Testing
   The web service provides a way to test authentication.
+
+  Scenario: When I post a request as JSON that is outside the default 4 minute window but within posted 10 minute window, then the app will say I am authorized.
+    Given a "rest_client" exists
+    When I perform an authentication test with "outside default 4 minute window"
+    Then the HTTP status code should be "200"
+    And the response at index 0 of the JSON response data should be "authorized"
   
   Scenario: When I post a request as JSON with valid authentication credentials, then the app will say I am authorized.
     Given I am authenticated
@@ -23,13 +29,13 @@ Feature: Authentication Testing
     Given a "rest_client" exists
     When I perform an authentication test with "old authentication data"
     Then the HTTP status code should be "401"
-    And the response at index 0 of the JSON response data should be "request is outside the required time window of 4 minutes"
+    And the response at index 0 of the JSON response data should be "request is outside the required time window of 10 minutes"
 
   Scenario: When I post a request with a timestamp that is too far in the future, then the app will say I am not authorized.
     Given a "rest_client" exists
     When I perform an authentication test with "future authentication data"
     Then the HTTP status code should be "401"
-    And the response at index 0 of the JSON response data should be "request is outside the required time window of 4 minutes"
+    And the response at index 0 of the JSON response data should be "request is outside the required time window of 10 minutes"
 
   Scenario: When I post a request with an unknown api key, then the app will say I am not authorized.
     Given a "rest_client" exists
