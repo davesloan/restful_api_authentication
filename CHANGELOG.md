@@ -1,5 +1,8 @@
 # Change History / Release Notes
 
+## Version 0.2.2
+* Closed Issue #5 - Improperly formatted timestamps result in an uncaught exception
+
 ## Version 0.2.1
 
 * Closed Issue #3 - Failing to define an environment in the YML causes a fatal error
