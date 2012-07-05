@@ -27,6 +27,8 @@ When /^I perform an authentication test with "([^"]*)"$/ do |payload_type|
     ts = Time.now.utc + 4.minutes
   elsif payload_type == "unknown api key data"
     client.api_key = '69704d90-4b77-012f-c334-68a86d3dfd00'
+  elsif payload_type == "improperly formatted timestamp"
+    ts = '2012-53-05 13:53:55 UTC'
   elsif payload_type == "invalid secret data"
     client.secret = '1e5483d9c6ddbe2f26eecf444ec7a976b2836ab17a209a0940f4dfdee1b3bc99'
   elsif payload_type == "invalid request uri data"

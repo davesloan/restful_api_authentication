@@ -43,6 +43,12 @@ Feature: Authentication Testing
     Then the HTTP status code should be "401"
     And the response at index 0 of the JSON response data should be "client is not registered"
 
+  Scenario: When I post a request with an improperly formatted timestamp, then the app will say I am not authorized.
+    Given a "rest_client" exists
+    When I perform an authentication test with "improperly formatted timestamp"
+    Then the HTTP status code should be "401"
+    And the response at index 0 of the JSON response data should be "timestamp was in an invalid format; should be YYYY-MM-DD HH:MM:SS UTC"
+
   Scenario: When I post a request with an invalid secret, then the app will say I am not authorized.
     Given a "rest_client" exists
     When I perform an authentication test with "invalid secret data"

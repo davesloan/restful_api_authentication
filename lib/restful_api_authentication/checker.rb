@@ -79,6 +79,10 @@ module RestfulApiAuthentication
         ts = Chronic.parse @http_headers[@@header_timestamp]
         before = Time.now.utc - 60*minutes
         after = Time.now.utc + 60*minutes
+        if ts.nil?
+          @errors << "timestamp was in an invalid format; should be YYYY-MM-DD HH:MM:SS UTC"
+          return false
+        end
         ts > before && ts < after
       end
 
