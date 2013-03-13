@@ -39,7 +39,7 @@ module RestfulApiAuthentication
       return_val = false
       if headers_have_values?
         if in_time_window?
-          if test_hash == @http_headers[@@header_signature]
+          if test_hash.downcase == @http_headers[@@header_signature].downcase
             if options[:require_master] == true
               if is_master?
                 return_val = true
