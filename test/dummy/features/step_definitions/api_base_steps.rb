@@ -38,6 +38,7 @@ When /^I perform an authentication test with "([^"]*)"$/ do |payload_type|
   str_to_hash = client.secret + request_uri + timestamp
   d = Digest::SHA256.new << str_to_hash
   signature = d.to_s
+  signature = signature.upcase if payload_type == "capitalized hash"
   add_headers({ "x-api-key" => client.api_key, "x-timestamp" => timestamp, "x-signature" => signature })
   url = "/help/authentication"
   get(url)

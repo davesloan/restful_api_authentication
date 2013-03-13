@@ -24,6 +24,12 @@ Feature: Authentication Testing
     When I perform a GET to "/help/authentication" as HTTP
     Then the HTTP status code should be "200"
     And the response at index 0 of the JSON response data should be "authorized"
+
+  Scenario: When I post a request as HTTP with valid authentication credentials and a capitalized SHA hash, then the app will say I am authorized.
+    Given a "rest_client" exists
+    When I perform an authentication test with "capitalized hash"
+    Then the HTTP status code should be "200"
+    And the response at index 0 of the JSON response data should be "authorized"
     
   Scenario: When I post a request with a timestamp that is too far in the past, then the app will say I am not authorized.
     Given a "rest_client" exists
