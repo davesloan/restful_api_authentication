@@ -66,9 +66,9 @@ module RestfulApiAuthentication
 
     private
 
-      # determines if a RestClient has master privileges or not
+      # determines if a RestAppClient has master privileges or not
       def is_master?
-        client = RestClient.where(:api_key => @http_headers[@@header_api_key]).first
+        client = RestAppClient.where(:api_key => @http_headers[@@header_api_key]).first
         client.is_master
       end
 
@@ -93,7 +93,7 @@ module RestfulApiAuthentication
 
       # generates the string that is hashed to produce the signature
       def str_to_hash
-        client = RestClient.where(:api_key => @http_headers[@@header_api_key]).first
+        client = RestAppClient.where(:api_key => @http_headers[@@header_api_key]).first
         if client.nil?
           @errors << "client is not registered"
         end

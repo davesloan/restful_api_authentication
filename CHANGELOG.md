@@ -1,5 +1,13 @@
 # Change History / Release Notes
 
+## Version 0.2.4
+* Closed Issue #7 - Option to use a different ActiveRecord class than RestClient
+* This update involves a lot of changes to a lot of files, but the functionality remains the same. The change was to rename RestClient to RestAppClient and rest_client to rest_client. This avoids a conflict with the popular rest-client gem that uses the same RestClient class name.
+
+## Version 0.2.3
+* Update checker.rb to automatically lowercase hashes for crypto lib compatibility
+* Closed Issue #6 - Wrong request_uri in README's client example
+
 ## Version 0.2.2
 * Closed Issue #5 - Improperly formatted timestamps result in an uncaught exception
 
