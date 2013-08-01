@@ -1,8 +1,8 @@
 def add_authentication_headers(path)
-  unless @rest_client.nil?
+  unless @rest_app_client.nil?
     time_stamp = Time.now.utc.to_s
     header 'x-timestamp', time_stamp
-    header 'x-signature', (Digest::SHA256.new << @rest_client.secret + path + time_stamp).to_s 
+    header 'x-signature', (Digest::SHA256.new << @rest_app_client.secret + path + time_stamp).to_s 
   end
 end
 

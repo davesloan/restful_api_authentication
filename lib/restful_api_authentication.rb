@@ -49,7 +49,7 @@ module RestfulApiAuthentication
 
   # This method should be used as a Rails before_filter in any controller in which one wants to ensure requests have valid client authentication headers and are considered master applications.
   #
-  # In order to be authenticated, not only do the headers need to be valid but the is_master flag must be true in the associated RestClient model.
+  # In order to be authenticated, not only do the headers need to be valid but the is_master flag must be true in the associated RestAppClient model.
   #
   # Master accounts can be used for anything you like but are typically reserved for admin specific requests that should only be performed by a limited number of clients.
   def authenticated_master?

@@ -43,10 +43,10 @@ Update the configuration (if you like) by editing the `config/restful_api_authen
 
 ### How It Works From A Client's Perspective
 
-Before anyone can use a resource which is protected using this gem, that person/app must have a valid API key and secret. These are generated and stored as a RestClient model in your app. The easiest way to generate this is to use the Rails console:
+Before anyone can use a resource which is protected using this gem, that person/app must have a valid API key and secret. These are generated and stored as a RestAppClient model in your app. The easiest way to generate this is to use the Rails console:
 
 ```ruby
-new_app = RestClient.create(:name => "My New App", :description => "This is my new application that will access my RESTful API.")
+new_app = RestAppClient.create(:name => "My New App", :description => "This is my new application that will access my RESTful API.")
 new_app.api_key
 new_app.secret
 ```
@@ -123,7 +123,7 @@ If the headers are not provided or the application fails to authenticate, your w
 
 ### Master Authentication
 
-Some web services might require an extra bit of security (creating new RestClients or managing User records). In these cases, you can require "master" authorization. Then, any RestClient with the is_master attribute set to true can use the resources but the others cannot.
+Some web services might require an extra bit of security (creating new RestAppClients or managing User records). In these cases, you can require "master" authorization. Then, any RestAppClient with the is_master attribute set to true can use the resources but the others cannot.
 
 Assuming you have authentication setup in your application controller, in the controller that requires master authentication:
 
