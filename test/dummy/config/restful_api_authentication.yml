@@ -1,4 +1,5 @@
 defaults: &DEFAULTS
+  disabled_message: "client is disabled"
   request_window: 10 # request window in minutes - between 5 and 10 is usually best; must be at least 2
   verbose_errors: true
   header_names:      # names of HTTP headers that must be sent on all requests requiring authentication

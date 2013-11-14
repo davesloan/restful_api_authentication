@@ -24,7 +24,7 @@
 module RestfulApiAuthentication
   class Checker
     # Class attributes which are set when the Rails application is initialized: locally cached version of configuration settings stored in YML file.
-    cattr_accessor :header_timestamp, :header_signature, :header_api_key, :time_window, :verbose_errors
+    cattr_accessor :header_timestamp, :header_signature, :header_api_key, :time_window, :verbose_errors, :disabled_message
     attr_accessor :http_headers, :request_uri, :errors
     
     def initialize(http_headers, request_uri)
@@ -35,11 +35,15 @@ module RestfulApiAuthentication
 
     # Checks if the current request passes authorization
     def authorized?(options = {})
-      raise "Configuration values not found. Please run rails g restful_api_authentication:install to generate a config file." if @@header_timestamp.nil? || @@header_signature.nil? || @@header_api_key.nil? || @@time_window.nil?
+      raise "Configuration values not found. Please run rails g restful_api_authentication:install to generate a config file." if @@header_timestamp.nil? || @@header_signature.nil? || @@header_api_key.nil? || @@time_window.nil? || @@disabled_message.nil?
       return_val = false
       if headers_have_values?
         if in_time_window?
           if test_hash.downcase == @http_headers[@@header_signature].downcase
+            if is_disabled?
+              @errors << @@disabled_message
+              return false
+            end
             if options[:require_master] == true
               if is_master?
                 return_val = true
@@ -65,6 +69,14 @@ module RestfulApiAuthentication
     end
 
     private
+
+      # determines if a RestClient is disabled or not
+      def is_disabled?
+        client = RestClient.where(:api_key => @http_headers[@@header_api_key]).first
+        return true if client.nil?
+        return false if client.is_disabled.nil?
+        client.is_disabled
+      end
 
       # determines if a RestClient has master privileges or not
       def is_master?

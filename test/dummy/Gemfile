@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 gem 'rails', '3.2.0'
 gem 'jquery-rails'
 gem 'sqlite3'
-gem 'restful_api_authentication', '0.2.3', :path => '/Users/dkiger/git_repos/restful_api_authentication'
+gem 'restful_api_authentication', '0.3.0', :path => '/Users/dsloan/Projects/restful_api_authentication'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'

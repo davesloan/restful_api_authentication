@@ -6,6 +6,10 @@ Given /^I am authenticated$/ do
   header 'x-api-key', @rest_client.api_key
 end
 
+Given(/^the rest client is disabled$/) do
+  @rest_client.is_disabled = true
+end
+
 Given /^I have master permissions$/ do
   @rest_client.is_master = true
 end

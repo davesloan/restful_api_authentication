@@ -22,5 +22,5 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 module RestfulApiAuthentication
-  VERSION = "0.2.3"
+  VERSION = "0.3.0"
 end

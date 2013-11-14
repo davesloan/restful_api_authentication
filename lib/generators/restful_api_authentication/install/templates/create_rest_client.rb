@@ -6,6 +6,7 @@ class CreateRestClient < ActiveRecord::Migration
       t.string :api_key
       t.string :secret
       t.boolean :is_master
+      t.boolean :disabled
       t.timestamps
     end
   end

@@ -1,6 +1,14 @@
 Feature: Authentication Testing
   The web service provides a way to test authentication.
 
+  @me
+  Scenario: When I post a request as JSON with valid authentication credentials but the client is disabled, then the app will return an error message.
+    Given I am authenticated
+    And the rest client is disabled
+    When I perform a GET to "/help/authentication" as JSON
+    Then the HTTP status code should be "401"
+    And the JSON response should be ["client is disabled"]
+
   Scenario: When I post a request as JSON that is outside the default 4 minute window but within posted 10 minute window, then the app will say I am authorized.
     Given a "rest_client" exists
     When I perform an authentication test with "outside default 4 minute window"

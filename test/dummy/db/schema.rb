@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120423195432) do
+ActiveRecord::Schema.define(:version => 20131114172742) do
 
   create_table "rest_clients", :force => true do |t|
     t.string   "name"
@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(:version => 20120423195432) do
     t.boolean  "is_master"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
+    t.boolean  "is_disabled"
   end
 
 end

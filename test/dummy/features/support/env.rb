@@ -22,4 +22,5 @@ def last_json
 end
 
 # includes some useful steps for working with factories
-require "factory_girl/step_definitions"
+require "factory_girl"
+require "factory_girl_rails"

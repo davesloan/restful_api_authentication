@@ -1,5 +1,8 @@
 # Change History / Release Notes
 
+## Version 0.3.0
+* Added an is_disabled flag to the RestClient model. This allows clients to be disabled without deleting them from the database, so their credentials remain if you ever want to enable them in the future.
+
 ## Version 0.2.2
 * Closed Issue #5 - Improperly formatted timestamps result in an uncaught exception
 

@@ -30,6 +30,7 @@ class RestClient < ActiveRecord::Base
       self.gen_api_key if self.api_key.nil? || self.api_key == ""
       self.gen_secret if self.secret.nil? || self.secret == ""
       self.is_master = false if self.is_master.nil?
+      self.is_disabled = false if self.is_disabled.nil?
       return true
     end
 

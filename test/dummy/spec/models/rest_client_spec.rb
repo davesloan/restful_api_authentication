@@ -45,5 +45,11 @@ describe RestClient do
     rest_client.should be_valid
     rest_client.is_master.should == false
   end
+
+  it "should set is_disabled to false if not explicitly set" do
+    rest_client = RestClient.new(:name => "Test", :description => "Test")
+    rest_client.should be_valid
+    rest_client.is_disabled.should == false
+  end
   
 end

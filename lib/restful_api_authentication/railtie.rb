@@ -29,9 +29,11 @@ module RestfulApiAuthentication
       RestfulApiAuthentication::Checker.header_signature = 'x-signature'
       RestfulApiAuthentication::Checker.header_api_key   = 'x-api-key'
       RestfulApiAuthentication::Checker.verbose_errors   = false
+      RestfulApiAuthentication::Checker.disabled_message = 'This client is disabled and cannot make calls to this API.'
       if File.exists? Rails.root.join('config', 'restful_api_authentication.yml')
         begin
           config_data = YAML::load_file(Rails.root.join('config', 'restful_api_authentication.yml'))[Rails.env]
+          RestfulApiAuthentication::Checker.disabled_message = config_data['disabled_message'] unless config_data['disabled_message'].nil?
           RestfulApiAuthentication::Checker.time_window      = config_data['request_window'].to_i unless config_data['request_window'].nil?
           RestfulApiAuthentication::Checker.header_timestamp = config_data['header_names']['timestamp'] unless config_data['header_names'].nil? or config_data['header_names']['timestamp'].nil?
           RestfulApiAuthentication::Checker.header_signature = config_data['header_names']['signature'] unless config_data['header_names'].nil? or config_data['header_names']['signature'].nil?
