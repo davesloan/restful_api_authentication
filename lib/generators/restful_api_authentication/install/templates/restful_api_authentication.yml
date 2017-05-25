@@ -1,20 +1,20 @@
 defaults: &DEFAULTS
-  disabled_message: "This client is currently disabled and cannot make calls to this API."
+  disabled_message: This client is currently disabled and cannot make calls to this API.
   request_window: 10    # request window in minutes - between 5 and 10 is usually best; must be at least 2
   verbose_errors: false # if false, error response will always be "not authorized", otherwise it will be more descriptive of why authentication failed
   header_names:         # names of HTTP headers that must be sent on all requests requiring authentication
-    timestamp: "x-timestamp"
-    signature: "x-signature"
-    api_key: "x-api-key"
+    timestamp: x-timestamp
+    signature: x-signature
+    api_key: x-api-key
 
 test:
   <<: *DEFAULTS
-  
+
 cucumber:
   <<: *DEFAULTS
-  
+
 development:
   <<: *DEFAULTS
-  
+
 production:
   <<: *DEFAULTS

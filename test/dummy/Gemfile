@@ -1,24 +1,35 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.0'
-gem 'jquery-rails'
-gem 'sqlite3'
-gem 'restful_api_authentication', '0.3.0', :path => '/Users/dsloan/Projects/restful_api_authentication'
-
-group :assets do
-  gem 'sass-rails',   '~> 3.2.3'
-  gem 'coffee-rails', '~> 3.2.1'
-  gem 'therubyracer'
-  gem 'uglifier', '>= 1.0.3'
+git_source(:github) do |repo_name|
+  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
+  "https://github.com/#{repo_name}.git"
 end
 
+gem 'rails', '~> 5.1.1'
+gem 'sqlite3'
+gem 'puma', '~> 3.7'
+gem 'sass-rails', '~> 5.0'
+gem 'uglifier', '>= 1.3.0'
+gem 'coffee-rails', '~> 4.2'
+gem 'turbolinks', '~> 5'
+gem 'jbuilder', '~> 2.5'
+gem 'restful_api_authentication', '0.4.0', :path => '../../../restful_api_authentication'
+
+
 group :development, :test do
+  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'capybara', '~> 2.13'
+  gem 'selenium-webdriver'
+end
+
+group :development do
+  gem 'listen'
   gem 'factory_girl_rails'                        # use factories instead of fixtures
   gem 'faker'                                     # easily create fake data for tests
   gem 'rspec-rails'                               # test framework
-  gem "cucumber-rails", "~> 1.0", require: false  # integration test framework
   gem 'simplecov'                                 # test coverage report
   gem 'json_spec'                                 # easier testing of JSON
   gem 'database_cleaner'                          # manage DB between tests
   gem 'random_data'
+  gem 'shoulda-matchers'
 end

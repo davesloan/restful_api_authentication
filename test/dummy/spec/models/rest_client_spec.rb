@@ -1,55 +1,53 @@
 require 'spec_helper'
 
-describe RestClient do
-
-  it "should be able to generate a new api key upon request" do
+describe RestClient, models: true do
+  it 'should be able to generate a new api key upon request' do
     rest_client = RestClient.new
     rest_client.gen_api_key
-    rest_client.api_key.should_not be_nil
+    expect(rest_client.api_key).to_not eq(nil)
   end
 
-  it "should be able to generate a new secret upon request" do
+  it 'should be able to generate a new secret upon request' do
     rest_client = RestClient.new
     rest_client.gen_secret
-    rest_client.secret.should_not be_nil
+    expect(rest_client.secret).to_not eq(nil)
   end
 
-  it "should save a valid client" do
-    RestClient.should have(0).records
+  it 'should save a valid client' do
+    expect(RestClient.count).to eq(0)
     rest_client = FactoryGirl.build :rest_client
     rest_client.save
-    RestClient.should have(1).record
+    expect(RestClient.count).to eq(1)
   end
-  
-  it "should not allow an empty name on create" do
+
+  it 'should not allow an empty name on create' do
     rest_client = FactoryGirl.build :rest_client
     rest_client.name = nil
-    rest_client.should_not be_valid
+    expect(rest_client.valid?).to eq(false)
   end
-  
-  it "should not allow an empty description on create" do
+
+  it 'should not allow an empty description on create' do
     rest_client = FactoryGirl.build :rest_client
     rest_client.description = nil
-    rest_client.should_not be_valid
+    expect(rest_client.valid?).to eq(false)
   end
-  
-  it "should enforce unique api keys" do
+
+  it 'should enforce unique api keys' do
     rest_client1 = FactoryGirl.build :rest_client
     rest_client1.save
     rest_client2 = FactoryGirl.build :rest_client
-    rest_client2.should_not be_valid
-  end
-  
-  it "should set is_master to false if not explicitly set" do
-    rest_client = RestClient.new(:name => "Test", :description => "Test")
-    rest_client.should be_valid
-    rest_client.is_master.should == false
+    expect(rest_client2.valid?).to eq(false)
   end
 
-  it "should set is_disabled to false if not explicitly set" do
-    rest_client = RestClient.new(:name => "Test", :description => "Test")
-    rest_client.should be_valid
-    rest_client.is_disabled.should == false
+  it 'should set is_master to false if not explicitly set' do
+    rest_client = RestClient.new(name: 'Test', description: 'Test')
+    expect(rest_client.valid?).to eq(true)
+    expect(rest_client.is_master).to eq(false)
   end
-  
+
+  it 'should set is_disabled to false if not explicitly set' do
+    rest_client = RestClient.new(name: 'Test', description: 'Test')
+    expect(rest_client.valid?).to eq(true)
+    expect(rest_client.is_disabled).to eq(false)
+  end
 end

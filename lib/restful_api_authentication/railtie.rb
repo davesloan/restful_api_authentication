@@ -23,21 +23,21 @@
 
 module RestfulApiAuthentication
   class Railtie < Rails::Railtie
-    initializer "restful_api_authentication_railtie.config_initializer" do
+    initializer 'restful_api_authentication_railtie.config_initializer' do
       RestfulApiAuthentication::Checker.time_window      = 4
       RestfulApiAuthentication::Checker.header_timestamp = 'x-timestamp'
       RestfulApiAuthentication::Checker.header_signature = 'x-signature'
       RestfulApiAuthentication::Checker.header_api_key   = 'x-api-key'
       RestfulApiAuthentication::Checker.verbose_errors   = false
       RestfulApiAuthentication::Checker.disabled_message = 'This client is disabled and cannot make calls to this API.'
-      if File.exists? Rails.root.join('config', 'restful_api_authentication.yml')
+      if File.exist? Rails.root.join('config', 'restful_api_authentication.yml')
         begin
-          config_data = YAML::load_file(Rails.root.join('config', 'restful_api_authentication.yml'))[Rails.env]
+          config_data = YAML.load_file(Rails.root.join('config', 'restful_api_authentication.yml'))[Rails.env]
           RestfulApiAuthentication::Checker.disabled_message = config_data['disabled_message'] unless config_data['disabled_message'].nil?
           RestfulApiAuthentication::Checker.time_window      = config_data['request_window'].to_i unless config_data['request_window'].nil?
-          RestfulApiAuthentication::Checker.header_timestamp = config_data['header_names']['timestamp'] unless config_data['header_names'].nil? or config_data['header_names']['timestamp'].nil?
-          RestfulApiAuthentication::Checker.header_signature = config_data['header_names']['signature'] unless config_data['header_names'].nil? or config_data['header_names']['signature'].nil?
-          RestfulApiAuthentication::Checker.header_api_key   = config_data['header_names']['api_key'] unless config_data['header_names'].nil? or config_data['header_names']['api_key'].nil?
+          RestfulApiAuthentication::Checker.header_timestamp = config_data['header_names']['timestamp'] unless config_data['header_names'].nil? || config_data['header_names']['timestamp'].nil?
+          RestfulApiAuthentication::Checker.header_signature = config_data['header_names']['signature'] unless config_data['header_names'].nil? || config_data['header_names']['signature'].nil?
+          RestfulApiAuthentication::Checker.header_api_key   = config_data['header_names']['api_key'] unless config_data['header_names'].nil? || config_data['header_names']['api_key'].nil?
           RestfulApiAuthentication::Checker.verbose_errors   = config_data['verbose_errors'] unless config_data['verbose_errors'].nil?
         rescue Exception => e
           # do nothing here -- we already have set the defaults

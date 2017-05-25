@@ -28,29 +28,28 @@ module RestfulApiAuthentication
     class InstallGenerator < ::Rails::Generators::Base
       include Rails::Generators::Migration
       source_root File.expand_path('../templates', __FILE__)
-      desc "This generator installs a restful_api_authentication.yml file, creates a RestClient model, and generates migrations for the RestfulApiAuthentication gem."
-      
-      def self.next_migration_number(path)
-        unless @prev_migration_nr
-          @prev_migration_nr = Time.now.utc.strftime("%Y%m%d%H%M%S").to_i
-        else
+      desc 'This generator installs a restful_api_authentication.yml file, creates a RestClient model, and generates migrations for the RestfulApiAuthentication gem.'
+
+      def self.next_migration_number(_path)
+        if @prev_migration_nr
           @prev_migration_nr += 1
+        else
+          @prev_migration_nr = Time.now.utc.strftime('%Y%m%d%H%M%S').to_i
         end
         @prev_migration_nr.to_s
       end
-      
+
       def copy_migrations
-        migration_template "create_rest_client.rb", "db/migrate/create_rest_client.rb"
+        migration_template 'create_rest_client.rb', 'db/migrate/create_rest_client.rb'
       end
-      
+
       def copy_the_config_file
-        copy_file "restful_api_authentication.yml", "config/restful_api_authentication.yml"
+        copy_file 'restful_api_authentication.yml', 'config/restful_api_authentication.yml'
       end
-      
+
       def copy_the_rest_client_model
-        copy_file "rest_client.rb", "app/models/rest_client.rb"
+        copy_file 'rest_client.rb', 'app/models/rest_client.rb'
       end
-      
     end
   end
 end

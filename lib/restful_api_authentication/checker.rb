@@ -26,7 +26,7 @@ module RestfulApiAuthentication
     # Class attributes which are set when the Rails application is initialized: locally cached version of configuration settings stored in YML file.
     cattr_accessor :header_timestamp, :header_signature, :header_api_key, :time_window, :verbose_errors, :disabled_message
     attr_accessor :http_headers, :request_uri, :errors
-    
+
     def initialize(http_headers, request_uri)
       @http_headers = http_headers
       @request_uri = request_uri
@@ -35,11 +35,11 @@ module RestfulApiAuthentication
 
     # Checks if the current request passes authorization
     def authorized?(options = {})
-      raise "Configuration values not found. Please run rails g restful_api_authentication:install to generate a config file." if @@header_timestamp.nil? || @@header_signature.nil? || @@header_api_key.nil? || @@time_window.nil? || @@disabled_message.nil?
+      raise 'Configuration values not found. Please run rails g restful_api_authentication:install to generate a config file.' if @@header_timestamp.nil? || @@header_signature.nil? || @@header_api_key.nil? || @@time_window.nil? || @@disabled_message.nil?
       return_val = false
       if headers_have_values?
         if in_time_window?
-          if test_hash.downcase == @http_headers[@@header_signature].downcase
+          if test_hash.casecmp(@http_headers[@@header_signature].downcase).zero?
             if is_disabled?
               @errors << @@disabled_message
               return false
@@ -48,74 +48,71 @@ module RestfulApiAuthentication
               if is_master?
                 return_val = true
               else
-                @errors << "client does not have the required permissions"
+                @errors << 'client does not have the required permissions'
               end
             else
               return_val = true
             end
           else
-            @errors << "signature is invalid"
+            @errors << 'signature is invalid'
           end
         else
-          @errors << "request is outside the required time window of #{@@time_window.to_s} minutes"
+          @errors << "request is outside the required time window of #{@@time_window} minutes"
         end
       else
-        @errors << "one or more required headers is missing"
+        @errors << 'one or more required headers is missing'
       end
       if return_val == false && @errors.count == 0
-        @errors << "authentication failed"
+        @errors << 'authentication failed'
       end
       return_val
     end
 
     private
 
-      # determines if a RestClient is disabled or not
-      def is_disabled?
-        client = RestClient.where(:api_key => @http_headers[@@header_api_key]).first
-        return true if client.nil?
-        return false if client.is_disabled.nil?
-        client.is_disabled
-      end
+    # determines if a RestClient is disabled or not
+    def is_disabled?
+      client = RestClient.where(api_key: @http_headers[@@header_api_key]).first
+      return true if client.nil?
+      return false if client.is_disabled.nil?
+      client.is_disabled
+    end
 
-      # determines if a RestClient has master privileges or not
-      def is_master?
-        client = RestClient.where(:api_key => @http_headers[@@header_api_key]).first
-        client.is_master
-      end
+    # determines if a RestClient has master privileges or not
+    def is_master?
+      client = RestClient.where(api_key: @http_headers[@@header_api_key]).first
+      client.is_master
+    end
 
-      # determines if given timestamp is within a specific window of minutes
-      def in_time_window?
-        @@time_window = 4 if @@time_window < 4
-        minutes = (@@time_window / 2).floor
-        ts = Chronic.parse @http_headers[@@header_timestamp]
-        before = Time.now.utc - 60*minutes
-        after = Time.now.utc + 60*minutes
-        if ts.nil?
-          @errors << "timestamp was in an invalid format; should be YYYY-MM-DD HH:MM:SS UTC"
-          return false
-        end
-        ts > before && ts < after
+    # determines if given timestamp is within a specific window of minutes
+    def in_time_window?
+      @@time_window = 4 if @@time_window < 4
+      minutes = (@@time_window / 2).floor
+      ts = Chronic.parse @http_headers[@@header_timestamp]
+      before = Time.now.utc - 60 * minutes
+      after = Time.now.utc + 60 * minutes
+      if ts.nil?
+        @errors << 'timestamp was in an invalid format; should be YYYY-MM-DD HH:MM:SS UTC'
+        return false
       end
+      ts > before && ts < after
+    end
 
-      # checks that incoming parameters have the keys we expect
-      def headers_have_values?
-        !@http_headers[@@header_api_key].nil? && !@http_headers[@@header_signature].nil? && !@http_headers[@@header_timestamp].nil?
-      end
+    # checks that incoming parameters have the keys we expect
+    def headers_have_values?
+      !@http_headers[@@header_api_key].nil? && !@http_headers[@@header_signature].nil? && !@http_headers[@@header_timestamp].nil?
+    end
 
-      # generates the string that is hashed to produce the signature
-      def str_to_hash
-        client = RestClient.where(:api_key => @http_headers[@@header_api_key]).first
-        if client.nil?
-          @errors << "client is not registered"
-        end
-        client.nil? ? "" : client.secret + @request_uri.gsub( /\?.*/, "" ) + @http_headers[@@header_timestamp]
-      end
+    # generates the string that is hashed to produce the signature
+    def str_to_hash
+      client = RestClient.where(api_key: @http_headers[@@header_api_key]).first
+      @errors << 'client is not registered' if client.nil?
+      client.nil? ? '' : client.secret + @request_uri.gsub(/\?.*/, '') + @http_headers[@@header_timestamp]
+    end
 
-      # generates the hash that is compared to the incoming signature
-      def test_hash
-        (Digest::SHA256.new << str_to_hash).to_s
-      end    
-    
+    # generates the hash that is compared to the incoming signature
+    def test_hash
+      (Digest::SHA256.new << str_to_hash).to_s
+    end
   end
 end
