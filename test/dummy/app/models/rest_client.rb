@@ -1,12 +1,11 @@
 class RestClient < ActiveRecord::Base
-  
-  validates :name, :presence => true
-  validates :description, :presence => true
-  validates :api_key, :presence => true, :uniqueness => true
-  validates :secret, :presence => true
-  
+  validates :name, presence: true
+  validates :description, presence: true
+  validates :api_key, presence: true, uniqueness: true
+  validates :secret, presence: true
+
   # white list fields for mass assignment
-  attr_accessible :name, :description
+  attr_accessor :name, :description
 
   # set default values on save
   before_validation :set_defaults
@@ -16,22 +15,21 @@ class RestClient < ActiveRecord::Base
     u = UUID.new
     self.api_key = u.generate
   end
-  
+
   # generates a new secret
   def gen_secret
     u = UUID.new
     d = Digest::SHA256.new << u.generate
     self.secret = d.to_s
   end
-  
-  private
-  
-    def set_defaults
-      self.gen_api_key if self.api_key.nil? || self.api_key == ""
-      self.gen_secret if self.secret.nil? || self.secret == ""
-      self.is_master = false if self.is_master.nil?
-      self.is_disabled = false if self.is_disabled.nil?
-      return true
-    end
 
+  private
+
+  def set_defaults
+    gen_api_key if api_key.nil? || api_key == ''
+    gen_secret if secret.nil? || secret == ''
+    self.is_master = false if is_master.nil?
+    self.is_disabled = false if is_disabled.nil?
+    true
+  end
 end

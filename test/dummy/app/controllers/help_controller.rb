@@ -1,11 +1,12 @@
 class HelpController < ApplicationController
-  skip_before_filter :authenticated?, :only => [:master_authentication]
-  before_filter :authenticated_master?, :only => [:master_authentication]
+  skip_before_action :authenticated?, only: [:master_authentication]
+  before_action :authenticated_master?, only: [:master_authentication]
+
   def authentication
-    respond_with(["authorized"], :status => 200, :location => nil)
+    render(json: { auth: ['authorized'] }, status: :ok)
   end
-  
+
   def master_authentication
-    respond_with(["authorized"], :status => 200, :location => nil)
+    render(json: { auth: ['authorized'] }, status: :ok)
   end
 end
